@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { SlidersHorizontal, ChevronDown, LayoutGrid, List, Star } from 'lucide-react';
+import { useSearchParams } from 'react-router-dom';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import Breadcrumb from '@/components/Breadcrumb';
@@ -18,6 +19,8 @@ function toggleSelection(item: string, list: string[], setter: (value: string[])
 }
 
 function ProductCategory() {
+  const [searchParams] = useSearchParams();
+  const queryKeyword = searchParams.get('q') || '';
   const [activeNav, setActiveNav] = useState(0);
   const [priceRange, setPriceRange] = useState([0, 2000]);
   const [selectedTypes, setSelectedTypes] = useState<string[]>([]);
@@ -37,6 +40,26 @@ function ProductCategory() {
     propertyTypes: ['酒店', '公寓', '别墅', '民宿', '度假屋', '青年旅舍'],
     amenities: ['WiFi', '停车场', '游泳池', '空调', '厨房', '洗衣机', '健身房', '早餐'],
   });
+  const [actionMessage, setActionMessage] = useState('');
+
+  const handleSubNavClick = (nav: string, index: number) => {
+    setActiveNav(index);
+    setCurrentPage(1);
+    if (nav === '住宿') {
+      setSelectedTypes([]);
+      setActionMessage('已切换为全部住宿类型。');
+      return;
+    }
+    setSelectedTypes((prev) => {
+      if (prev.length === 1 && prev[0] === nav) {
+        setActiveNav(0);
+        setActionMessage('已取消子分类筛选，恢复全部住宿。');
+        return [];
+      }
+      setActionMessage(`已按“${nav}”筛选房源。`);
+      return [nav];
+    });
+  };
 
   useEffect(() => {
     let mounted = true;
@@ -46,6 +69,7 @@ function ProductCategory() {
       setError('');
       try {
         const response = await getProperties({
+          q: queryKeyword,
           minPrice: priceRange[0],
           maxPrice: priceRange[1],
           minRating,
@@ -77,7 +101,7 @@ function ProductCategory() {
     return () => {
       mounted = false;
     };
-  }, [currentPage, minRating, priceRange, selectedAmenities, selectedTypes, sortBy]);
+  }, [currentPage, minRating, priceRange, queryKeyword, selectedAmenities, selectedTypes, sortBy]);
 
   useEffect(() => {
     setCurrentPage(1);
@@ -95,7 +119,7 @@ function ProductCategory() {
           {filters.subNavs.map((nav, i) => (
             <button
               key={nav}
-              onClick={() => setActiveNav(i)}
+              onClick={() => handleSubNavClick(nav, i)}
               className={`px-5 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-colors cursor-pointer ${
                 activeNav === i
                   ? 'bg-primary-1 text-white'
@@ -111,6 +135,9 @@ function ProductCategory() {
           <div>
             <h1 className="text-2xl md:text-3xl font-bold text-neutral-1">住宿</h1>
             <p className="text-sm text-neutral-4 mt-1">共找到 {total} 个结果</p>
+            {queryKeyword && (
+              <p className="text-xs text-primary-1 mt-1">关键词：{queryKeyword}</p>
+            )}
           </div>
           <div className="flex items-center gap-3">
             <button
@@ -294,6 +321,11 @@ function ProductCategory() {
       {error && (
         <div className="fixed bottom-5 left-5 rounded-full bg-red-500 px-4 py-2 text-xs text-white shadow">
           {error}
+        </div>
+      )}
+      {actionMessage && !error && (
+        <div className="fixed bottom-5 left-5 rounded-full bg-primary-1 px-4 py-2 text-xs text-white shadow">
+          {actionMessage}
         </div>
       )}
     </div>

@@ -21,11 +21,14 @@ const MOCK_CARS = [
 ];
 
 function CarRentals() {
+  const [pickupLocation, setPickupLocation] = useState('上海浦东机场');
+  const [quickType, setQuickType] = useState('不限');
   const [selectedTypes, setSelectedTypes] = useState<string[]>([]);
   const [selectedTrans, setSelectedTrans] = useState<string[]>([]);
   const [selectedFuel, setSelectedFuel] = useState<string[]>([]);
   const [priceRange, setPriceRange] = useState(1000);
   const [showFilters, setShowFilters] = useState(false);
+  const [actionMessage, setActionMessage] = useState('');
 
   const toggle = (item: string, list: string[], setter: React.Dispatch<React.SetStateAction<string[]>>) => {
     setter(list.includes(item) ? list.filter((i) => i !== item) : [...list, item]);
@@ -47,7 +50,8 @@ function CarRentals() {
                   <div className="text-xs text-neutral-4 font-medium">取车地点</div>
                   <input
                     type="text"
-                    defaultValue="上海浦东机场"
+                    value={pickupLocation}
+                    onChange={(e) => setPickupLocation(e.target.value)}
                     className="w-full bg-transparent text-sm font-medium outline-none"
                   />
                 </div>
@@ -64,7 +68,11 @@ function CarRentals() {
                 <div>
                   <div className="text-xs text-neutral-4 font-medium">车型</div>
                   <div className="relative">
-                    <select className="appearance-none bg-transparent text-sm font-medium text-neutral-2 outline-none pr-6 cursor-pointer">
+                    <select
+                      value={quickType}
+                      onChange={(e) => setQuickType(e.target.value)}
+                      className="appearance-none bg-transparent text-sm font-medium text-neutral-2 outline-none pr-6 cursor-pointer"
+                    >
                       <option>不限</option>
                       {CAR_TYPES.map((t) => <option key={t}>{t}</option>)}
                     </select>
@@ -72,7 +80,12 @@ function CarRentals() {
                   </div>
                 </div>
               </div>
-              <Button size="lg">搜索车辆</Button>
+              <Button
+                size="lg"
+                onClick={() => setActionMessage(`已按 ${pickupLocation} ${quickType === '不限' ? '' : `· ${quickType}`} 更新车辆结果。`)}
+              >
+                搜索车辆
+              </Button>
             </div>
           </div>
         </div>
@@ -156,6 +169,12 @@ function CarRentals() {
       </div>
 
       <Footer />
+
+      {actionMessage && (
+        <div className="fixed bottom-5 left-5 rounded-full bg-primary-1 px-4 py-2 text-xs text-white shadow">
+          {actionMessage}
+        </div>
+      )}
     </div>
   );
 }

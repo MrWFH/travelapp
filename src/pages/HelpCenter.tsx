@@ -3,6 +3,7 @@ import {
   Search, CreditCard, Calendar, Home, Shield, HelpCircle,
   ChevronDown, ChevronUp, Phone, Mail, MessageCircle,
 } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import Button from '@/components/Button';
@@ -44,8 +45,10 @@ const POPULAR_FAQS = [
 ];
 
 function HelpCenter() {
+  const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState('');
   const [openFaq, setOpenFaq] = useState<number | null>(null);
+  const [actionMessage, setActionMessage] = useState('');
 
   return (
     <div className="min-h-screen bg-neutral-8">
@@ -77,6 +80,10 @@ function HelpCenter() {
             {FAQ_CATEGORIES.map(({ icon: Icon, label, desc }) => (
               <button
                 key={label}
+                onClick={() => {
+                  setSearchQuery(label);
+                  setActionMessage(`已按“${label}”填充搜索词，可继续输入并检索。`);
+                }}
                 className="flex items-center gap-4 p-5 rounded-2xl bg-white border border-neutral-6 hover:border-primary-1 hover:shadow-md transition-all cursor-pointer text-left"
               >
                 <div className="w-12 h-12 rounded-xl bg-primary-1/10 flex items-center justify-center shrink-0">
@@ -136,7 +143,9 @@ function HelpCenter() {
               </div>
               <h3 className="font-semibold text-neutral-2 mb-2">在线客服</h3>
               <p className="text-sm text-neutral-4 mb-4">平均响应时间 &lt; 5分钟</p>
-              <Button size="sm">开始对话</Button>
+              <Button size="sm" onClick={() => navigate('/messages?source=help-center')}>
+                开始对话
+              </Button>
             </div>
             <div className="bg-white rounded-2xl border border-neutral-6 p-6 text-center">
               <div className="w-14 h-14 rounded-full bg-secondary-3/10 flex items-center justify-center mx-auto mb-4">
@@ -151,6 +160,12 @@ function HelpCenter() {
       </div>
 
       <Footer />
+
+      {actionMessage && (
+        <div className="fixed bottom-5 left-5 rounded-full bg-primary-1 px-4 py-2 text-xs text-white shadow">
+          {actionMessage}
+        </div>
+      )}
     </div>
   );
 }

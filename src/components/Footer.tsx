@@ -41,9 +41,9 @@ const FOOTER_SECTIONS = [
 ];
 
 const SOCIAL_LINKS = [
-  { icon: Globe, label: '官网' },
-  { icon: MessageCircle, label: '微博' },
-  { icon: Rss, label: '订阅' },
+  { icon: Globe, label: '官网', href: 'https://www.figma.com/' },
+  { icon: MessageCircle, label: '微博', href: 'https://weibo.com/' },
+  { icon: Rss, label: '订阅', href: 'https://github.com/MrWFH/travelapp' },
 ];
 
 function Footer() {
@@ -61,11 +61,13 @@ function Footer() {
             </p>
           </div>
           <div className="flex items-center gap-3">
-            {SOCIAL_LINKS.map(({ icon: Icon, label }) => (
+            {SOCIAL_LINKS.map(({ icon: Icon, label, href }) => (
               <a
                 key={label}
-                href="#"
+                href={href}
                 aria-label={label}
+                target="_blank"
+                rel="noreferrer"
                 className="w-10 h-10 rounded-full bg-neutral-3 flex items-center justify-center text-neutral-5 hover:bg-primary-1 hover:text-white transition-colors"
               >
                 <Icon size={18} />

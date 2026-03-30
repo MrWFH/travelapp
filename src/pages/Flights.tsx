@@ -20,10 +20,14 @@ const MOCK_FLIGHTS = [
 function Flights() {
   const [tripType, setTripType] = useState<'round' | 'oneway'>('round');
   const [cabinClass, setCabinClass] = useState('经济舱');
+  const [departureCity, setDepartureCity] = useState('北京');
+  const [arrivalCity, setArrivalCity] = useState('东京');
+  const [selectedTimeSlots, setSelectedTimeSlots] = useState<string[]>([]);
   const [selectedStops, setSelectedStops] = useState<number[]>([]);
   const [selectedAirlines, setSelectedAirlines] = useState<string[]>([]);
   const [priceRange, setPriceRange] = useState(5000);
   const [showFilters, setShowFilters] = useState(false);
+  const [actionMessage, setActionMessage] = useState('');
 
   const toggleStop = (stop: number) => {
     setSelectedStops(selectedStops.includes(stop) ? selectedStops.filter((s) => s !== stop) : [...selectedStops, stop]);
@@ -31,6 +35,18 @@ function Flights() {
 
   const toggleAirline = (airline: string) => {
     setSelectedAirlines(selectedAirlines.includes(airline) ? selectedAirlines.filter((a) => a !== airline) : [...selectedAirlines, airline]);
+  };
+  const toggleTimeSlot = (slot: string) => {
+    setSelectedTimeSlots((prev) =>
+      prev.includes(slot) ? prev.filter((item) => item !== slot) : [...prev, slot]
+    );
+  };
+  const handleSwapCities = () => {
+    setDepartureCity(arrivalCity);
+    setArrivalCity(departureCity);
+  };
+  const handleSearch = () => {
+    setActionMessage(`已按 ${departureCity} → ${arrivalCity} 更新航班结果。`);
   };
 
   return (
@@ -83,12 +99,16 @@ function Flights() {
                   <div className="text-xs text-neutral-4 font-medium">出发城市</div>
                   <input
                     type="text"
-                    defaultValue="北京"
+                    value={departureCity}
+                    onChange={(e) => setDepartureCity(e.target.value)}
                     className="w-full bg-transparent text-sm font-medium outline-none"
                   />
                 </div>
               </div>
-              <button className="self-center p-2 rounded-full bg-primary-1/10 text-primary-1 hover:bg-primary-1/20 cursor-pointer shrink-0">
+              <button
+                onClick={handleSwapCities}
+                className="self-center p-2 rounded-full bg-primary-1/10 text-primary-1 hover:bg-primary-1/20 cursor-pointer shrink-0"
+              >
                 <ArrowRightLeft size={18} />
               </button>
               <div className="flex-1 flex items-center gap-3 px-4 py-3 rounded-xl bg-neutral-7">
@@ -97,7 +117,8 @@ function Flights() {
                   <div className="text-xs text-neutral-4 font-medium">到达城市</div>
                   <input
                     type="text"
-                    defaultValue="东京"
+                    value={arrivalCity}
+                    onChange={(e) => setArrivalCity(e.target.value)}
                     className="w-full bg-transparent text-sm font-medium outline-none"
                   />
                 </div>
@@ -118,7 +139,7 @@ function Flights() {
                   <div className="text-sm font-medium text-neutral-2">2 位成人</div>
                 </div>
               </div>
-              <Button size="lg">搜索航班</Button>
+              <Button size="lg" onClick={handleSearch}>搜索航班</Button>
             </div>
           </div>
         </div>
@@ -176,7 +197,12 @@ function Flights() {
                 {['凌晨 00-06', '上午 06-12', '下午 12-18', '晚上 18-24'].map((time) => (
                   <button
                     key={time}
-                    className="flex items-center gap-1.5 px-3 py-2 rounded-lg border border-neutral-6 text-xs text-neutral-3 hover:border-primary-1 hover:text-primary-1 cursor-pointer"
+                    onClick={() => toggleTimeSlot(time)}
+                    className={`flex items-center gap-1.5 px-3 py-2 rounded-lg border text-xs cursor-pointer ${
+                      selectedTimeSlots.includes(time)
+                        ? 'border-primary-1 text-primary-1 bg-primary-1/5'
+                        : 'border-neutral-6 text-neutral-3 hover:border-primary-1 hover:text-primary-1'
+                    }`}
                   >
                     <Clock size={12} />
                     {time}
@@ -230,6 +256,12 @@ function Flights() {
       </div>
 
       <Footer />
+
+      {actionMessage && (
+        <div className="fixed bottom-5 left-5 rounded-full bg-primary-1 px-4 py-2 text-xs text-white shadow">
+          {actionMessage}
+        </div>
+      )}
     </div>
   );
 }

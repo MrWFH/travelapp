@@ -45,10 +45,10 @@ const propertyDetails = {
     amenities: ['高速WiFi', '厨房', '免费停车', '空调', '洗衣机', '电视', '浴缸', '健身房', '花园', '安保系统'],
     host: { id: 1, name: 'Sarah', avatar: 'https://picsum.photos/seed/host/100/100', intro: '超赞房东 · 2020年加入', rating: 4.9, verified: true },
     reviews: [
-      { id: 1, name: '李明', avatar: 'https://picsum.photos/seed/user1/100/100', date: '2026年2月', rating: 5, text: '非常棒的住宿体验！房间宽敞明亮，设施齐全。房东很热情，还推荐了很多当地美食。下次还会再来！' },
-      { id: 2, name: '王芳', avatar: 'https://picsum.photos/seed/user2/100/100', date: '2026年1月', rating: 4, text: '位置很好，离海滩步行只需5分钟。早餐很丰盛，景色也非常美。唯一不足的是隔音稍差。' },
-      { id: 3, name: '张伟', avatar: 'https://picsum.photos/seed/user3/100/100', date: '2025年12月', rating: 5, text: '完美的度假体验！泳池很大很干净，日落时分坐在阳台上看海简直太惬意了。强烈推荐！' },
-      { id: 4, name: '陈静', avatar: 'https://picsum.photos/seed/user4/100/100', date: '2025年11月', rating: 4, text: '环境优美，设施完善，性价比很高。适合情侣和家庭出游。' },
+      { id: 1, name: '王小明', avatar: 'https://picsum.photos/seed/user1/100/100', date: '2026年2月', rating: 5, text: '非常棒的住宿体验！房间宽敞明亮，设施齐全。房东很热情，还推荐了很多当地美食。下次还会再来！' },
+      { id: 2, name: '王小芳', avatar: 'https://picsum.photos/seed/user2/100/100', date: '2026年1月', rating: 4, text: '位置很好，离海滩步行只需5分钟。早餐很丰盛，景色也非常美。唯一不足的是隔音稍差。' },
+      { id: 3, name: '张小伟', avatar: 'https://picsum.photos/seed/user3/100/100', date: '2025年12月', rating: 5, text: '完美的度假体验！泳池很大很干净，日落时分坐在阳台上看海简直太惬意了。强烈推荐！' },
+      { id: 4, name: '陈小静', avatar: 'https://picsum.photos/seed/user4/100/100', date: '2025年11月', rating: 4, text: '环境优美，设施完善，性价比很高。适合情侣和家庭出游。' },
     ],
     nearby: [
       { name: '金巴兰海滩', distance: '1.2 km', type: '景点' },

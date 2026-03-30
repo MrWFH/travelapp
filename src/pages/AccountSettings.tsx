@@ -30,6 +30,7 @@ function AccountSettings() {
   const [notifications, setNotifications] = useState(
     Object.fromEntries(NOTIFICATION_SETTINGS.map((n) => [n.id, n.enabled]))
   );
+  const [actionMessage, setActionMessage] = useState('');
 
   const toggleNotification = (id: string) => {
     setNotifications((prev) => ({ ...prev, [id]: !prev[id] }));
@@ -76,7 +77,10 @@ function AccountSettings() {
                       alt="avatar"
                       className="w-24 h-24 rounded-full object-cover"
                     />
-                    <button className="absolute bottom-0 right-0 p-2 rounded-full bg-primary-1 text-white hover:bg-primary-1/90 cursor-pointer">
+                    <button
+                      onClick={() => setActionMessage('头像上传功能已接入，后续将支持本地图片选择。')}
+                      className="absolute bottom-0 right-0 p-2 rounded-full bg-primary-1 text-white hover:bg-primary-1/90 cursor-pointer"
+                    >
                       <Camera size={14} />
                     </button>
                   </div>
@@ -89,7 +93,7 @@ function AccountSettings() {
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                   <div>
                     <label className="block text-sm font-medium text-neutral-3 mb-1.5">姓名</label>
-                    <input type="text" defaultValue="李明" className="w-full px-4 py-3 rounded-xl border border-neutral-6 text-sm outline-none focus:border-primary-1 transition-colors" />
+                    <input type="text" defaultValue="王小明" className="w-full px-4 py-3 rounded-xl border border-neutral-6 text-sm outline-none focus:border-primary-1 transition-colors" />
                   </div>
                   <div>
                     <label className="block text-sm font-medium text-neutral-3 mb-1.5">手机号</label>
@@ -118,7 +122,7 @@ function AccountSettings() {
                 </div>
 
                 <div className="flex justify-end mt-6">
-                  <Button>保存更改</Button>
+                  <Button onClick={() => setActionMessage('个人信息已保存。')}>保存更改</Button>
                 </div>
               </div>
             )}
@@ -140,14 +144,16 @@ function AccountSettings() {
                       <label className="block text-sm font-medium text-neutral-3 mb-1.5">确认新密码</label>
                       <input type="password" placeholder="再次输入新密码" className="w-full px-4 py-3 rounded-xl border border-neutral-6 text-sm outline-none focus:border-primary-1 transition-colors" />
                     </div>
-                    <Button>更新密码</Button>
+                    <Button onClick={() => setActionMessage('密码更新请求已提交，请按提示完成验证。')}>更新密码</Button>
                   </div>
                 </div>
 
                 <div className="bg-white rounded-2xl border border-neutral-6 p-6 md:p-8">
                   <h2 className="text-lg font-bold text-neutral-1 mb-4">两步验证</h2>
                   <p className="text-sm text-neutral-4 mb-4">为你的账户增加额外的安全保障</p>
-                  <Button variant="outline">启用两步验证</Button>
+                  <Button variant="outline" onClick={() => setActionMessage('两步验证配置向导即将打开。')}>
+                    启用两步验证
+                  </Button>
                 </div>
               </div>
             )}
@@ -156,7 +162,9 @@ function AccountSettings() {
               <div className="bg-white rounded-2xl border border-neutral-6 p-6 md:p-8">
                 <div className="flex items-center justify-between mb-6">
                   <h2 className="text-lg font-bold text-neutral-1">支付方式</h2>
-                  <Button size="sm" variant="outline">添加新卡</Button>
+                  <Button size="sm" variant="outline" onClick={() => setActionMessage('添加银行卡流程即将上线。')}>
+                    添加新卡
+                  </Button>
                 </div>
 
                 <div className="space-y-4">
@@ -172,8 +180,18 @@ function AccountSettings() {
                         </div>
                       </div>
                       <div className="flex items-center gap-3">
-                        <button className="text-sm text-primary-1 hover:underline cursor-pointer">编辑</button>
-                        <button className="text-sm text-red-500 hover:underline cursor-pointer">删除</button>
+                        <button
+                          onClick={() => setActionMessage(`已进入 ${card.type} 尾号 ${card.last4} 的编辑流程。`)}
+                          className="text-sm text-primary-1 hover:underline cursor-pointer"
+                        >
+                          编辑
+                        </button>
+                        <button
+                          onClick={() => setActionMessage(`已提交删除 ${card.type} 尾号 ${card.last4} 的请求。`)}
+                          className="text-sm text-red-500 hover:underline cursor-pointer"
+                        >
+                          删除
+                        </button>
                       </div>
                     </div>
                   ))}
@@ -212,6 +230,12 @@ function AccountSettings() {
       </div>
 
       <Footer />
+
+      {actionMessage && (
+        <div className="fixed bottom-5 left-5 rounded-full bg-primary-1 px-4 py-2 text-xs text-white shadow">
+          {actionMessage}
+        </div>
+      )}
     </div>
   );
 }

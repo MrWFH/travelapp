@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { CreditCard, Lock, ShieldCheck, MapPin, Calendar, Users } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import Breadcrumb from '@/components/Breadcrumb';
@@ -245,8 +245,8 @@ function Checkout() {
 
               <p className="text-xs text-neutral-4 text-center mt-4">
                 点击确认即表示您同意我们的
-                <a href="#" className="text-primary-1 underline">服务条款</a>和
-                <a href="#" className="text-primary-1 underline">退订政策</a>
+                <Link to="/terms" className="text-primary-1 underline">服务条款</Link>和
+                <Link to="/cancellation" className="text-primary-1 underline">退订政策</Link>
               </p>
             </div>
           </div>

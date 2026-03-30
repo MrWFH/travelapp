@@ -20,6 +20,7 @@ const TRAVELER_LINKS = [
 function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [travelerOpen, setTravelerOpen] = useState(false);
+  const [actionMessage, setActionMessage] = useState('');
   const location = useLocation();
 
   return (
@@ -69,17 +70,24 @@ function Navbar() {
           {/* Right side */}
           <div className="hidden md:flex items-center gap-3">
             <span className="text-sm font-medium text-neutral-4 hover:text-neutral-2 cursor-pointer transition-colors">
-              支持
+              <Link to="/help">支持</Link>
             </span>
-            <button className="flex items-center gap-1.5 px-3 py-2 rounded-full hover:bg-neutral-7 text-neutral-4 text-sm font-medium transition-colors cursor-pointer">
+            <button
+              onClick={() => setActionMessage('多语言切换功能已启用筹备，当前先展示中文界面。')}
+              className="flex items-center gap-1.5 px-3 py-2 rounded-full hover:bg-neutral-7 text-neutral-4 text-sm font-medium transition-colors cursor-pointer"
+              aria-label="language"
+              title="语言设置"
+            >
               <Globe size={18} />
               <span>语言</span>
             </button>
-            <Button variant="outline" size="sm">列出你的财产</Button>
-            <button className="relative p-2 rounded-full hover:bg-neutral-7 text-neutral-4 transition-colors cursor-pointer">
+            <Link to="/list-property">
+              <Button variant="outline" size="sm">列出你的财产</Button>
+            </Link>
+            <Link to="/messages" className="relative p-2 rounded-full hover:bg-neutral-7 text-neutral-4 transition-colors cursor-pointer">
               <Bell size={20} />
               <span className="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-secondary-4" />
-            </button>
+            </Link>
             <Link
               to="/profile"
               className="w-9 h-9 rounded-full bg-primary-1/10 flex items-center justify-center text-primary-1 font-semibold text-sm hover:bg-primary-1/20 transition-colors"
@@ -113,18 +121,32 @@ function Navbar() {
               </Link>
             ))}
             <hr className="border-neutral-6 my-2" />
-            <span className="block px-4 py-2.5 text-sm text-neutral-4">支持</span>
-            <button className="flex items-center gap-2 px-4 py-2.5 text-sm text-neutral-4 hover:bg-neutral-7 rounded-lg w-full cursor-pointer">
+            <Link to="/help" className="block px-4 py-2.5 text-sm text-neutral-4 hover:bg-neutral-7 rounded-lg">支持</Link>
+            <button
+              onClick={() => {
+                setActionMessage('多语言切换功能已启用筹备，当前先展示中文界面。');
+                setMobileOpen(false);
+              }}
+              className="flex items-center gap-2 px-4 py-2.5 text-sm text-neutral-4 hover:bg-neutral-7 rounded-lg w-full cursor-pointer"
+              title="语言设置"
+            >
               <Globe size={16} />
               语言
             </button>
             <div className="flex gap-2 pt-2">
-              <Button variant="outline" className="flex-1" size="sm">列出你的财产</Button>
+              <Link to="/list-property" className="flex-1">
+                <Button variant="outline" className="w-full" size="sm">列出你的财产</Button>
+              </Link>
               <Link to="/profile" className="flex-1">
                 <Button className="w-full" size="sm">个人中心</Button>
               </Link>
             </div>
           </div>
+        </div>
+      )}
+      {actionMessage && (
+        <div className="absolute left-1/2 top-full mt-2 -translate-x-1/2 rounded-full bg-primary-1 px-4 py-2 text-xs text-white shadow">
+          {actionMessage}
         </div>
       )}
     </nav>

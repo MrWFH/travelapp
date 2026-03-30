@@ -36,6 +36,7 @@ function ListProperty() {
   const [selectedAmenities, setSelectedAmenities] = useState<string[]>([]);
   const [rooms, setRooms] = useState({ bedrooms: 1, beds: 1, bathrooms: 1 });
   const [guests, setGuests] = useState(2);
+  const [actionMessage, setActionMessage] = useState('');
 
   const toggleAmenity = (label: string) => {
     setSelectedAmenities((prev) =>
@@ -204,7 +205,12 @@ function ListProperty() {
               </div>
               <p className="font-semibold text-neutral-2 mb-1">拖拽照片到这里或点击上传</p>
               <p className="text-sm text-neutral-4 mb-4">支持 JPG、PNG、WebP，单张最大10MB</p>
-              <Button variant="outline" size="sm" leftIcon={<Upload size={14} />}>
+              <Button
+                variant="outline"
+                size="sm"
+                leftIcon={<Upload size={14} />}
+                onClick={() => setActionMessage('图片上传入口已打开（演示模式）。')}
+              >
                 选择照片
               </Button>
             </div>
@@ -281,13 +287,25 @@ function ListProperty() {
 
           {/* Submit */}
           <div className="text-center pt-4 pb-8">
-            <Button size="lg" className="px-16">发布房源</Button>
+            <Button
+              size="lg"
+              className="px-16"
+              onClick={() => setActionMessage('房源发布申请已提交，预计 24 小时内完成审核。')}
+            >
+              发布房源
+            </Button>
             <p className="text-xs text-neutral-4 mt-3">发布前，我们的团队会进行审核，通常在 24 小时内完成。</p>
           </div>
         </div>
       </div>
 
       <Footer />
+
+      {actionMessage && (
+        <div className="fixed bottom-5 left-5 rounded-full bg-primary-1 px-4 py-2 text-xs text-white shadow">
+          {actionMessage}
+        </div>
+      )}
     </div>
   );
 }

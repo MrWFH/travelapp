@@ -15,7 +15,7 @@ import {
 dotenv.config();
 
 const app = express();
-const port = Number(process.env.PORT || 4000);
+const port = Number(process.env.PORT || 8001);
 
 app.use(
   cors({
@@ -44,6 +44,7 @@ app.get('/api/home', (_req, res) => {
 
 app.get('/api/properties', (req, res) => {
   const {
+    q,
     minPrice,
     maxPrice,
     minRating,
@@ -55,6 +56,16 @@ app.get('/api/properties', (req, res) => {
   } = req.query;
 
   let list = [...properties];
+
+  if (q) {
+    const keyword = String(q).toLowerCase();
+    list = list.filter(
+      (item) =>
+        item.title.toLowerCase().includes(keyword) ||
+        item.location.toLowerCase().includes(keyword) ||
+        item.city.toLowerCase().includes(keyword),
+    );
+  }
 
   if (minPrice) {
     list = list.filter((item) => item.price >= Number(minPrice));

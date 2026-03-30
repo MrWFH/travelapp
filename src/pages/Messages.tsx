@@ -19,6 +19,7 @@ function Messages() {
   const [showMobileChat, setShowMobileChat] = useState(false);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const [actionMessage, setActionMessage] = useState('');
 
   useEffect(() => {
     let mounted = true;
@@ -166,10 +167,16 @@ function Messages() {
                     </div>
                   </div>
                   <div className="flex items-center gap-2">
-                    <button className="p-2 rounded-full hover:bg-neutral-7 text-neutral-4 cursor-pointer">
+                    <button
+                      onClick={() => setActionMessage('语音通话功能正在接入中，请先使用文字沟通。')}
+                      className="p-2 rounded-full hover:bg-neutral-7 text-neutral-4 cursor-pointer"
+                    >
                       <Phone size={18} />
                     </button>
-                    <button className="p-2 rounded-full hover:bg-neutral-7 text-neutral-4 cursor-pointer">
+                    <button
+                      onClick={() => setActionMessage('更多会话设置即将上线。')}
+                      className="p-2 rounded-full hover:bg-neutral-7 text-neutral-4 cursor-pointer"
+                    >
                       <MoreVertical size={18} />
                     </button>
                   </div>
@@ -197,10 +204,16 @@ function Messages() {
 
                 <div className="px-6 py-4 border-t border-neutral-6">
                   <div className="flex items-center gap-3">
-                    <button className="p-2 rounded-full hover:bg-neutral-7 text-neutral-4 cursor-pointer shrink-0">
+                    <button
+                      onClick={() => setActionMessage('图片发送能力开发中。')}
+                      className="p-2 rounded-full hover:bg-neutral-7 text-neutral-4 cursor-pointer shrink-0"
+                    >
                       <Image size={20} />
                     </button>
-                    <button className="p-2 rounded-full hover:bg-neutral-7 text-neutral-4 cursor-pointer shrink-0">
+                    <button
+                      onClick={() => setActionMessage('表情面板即将上线。')}
+                      className="p-2 rounded-full hover:bg-neutral-7 text-neutral-4 cursor-pointer shrink-0"
+                    >
                       <Smile size={20} />
                     </button>
                     <input
@@ -245,6 +258,11 @@ function Messages() {
       {error && (
         <div className="fixed bottom-5 left-5 rounded-full bg-red-500 px-4 py-2 text-xs text-white shadow">
           {error}
+        </div>
+      )}
+      {actionMessage && !error && (
+        <div className="fixed bottom-5 left-5 rounded-full bg-primary-1 px-4 py-2 text-xs text-white shadow">
+          {actionMessage}
         </div>
       )}
     </div>

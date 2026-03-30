@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { ArrowRight, Send } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import SearchBar from '@/components/SearchBar';
@@ -10,9 +10,12 @@ import Button from '@/components/Button';
 import { getHomeData, type HomeData } from '@/service/travelApi';
 
 function Home() {
+  const navigate = useNavigate();
   const [homeData, setHomeData] = useState<HomeData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const [newsletterEmail, setNewsletterEmail] = useState('');
+  const [newsletterMessage, setNewsletterMessage] = useState('');
 
   useEffect(() => {
     let mounted = true;
@@ -48,6 +51,29 @@ function Home() {
   const articles = homeData?.articles ?? [];
   const partners = homeData?.partners ?? [];
 
+  const handleCategoryChange = (index: number) => {
+    const routeByIndex = ['/stays', '/flights', '/car-rentals', '/map', '/help'];
+    navigate(routeByIndex[index] || '/stays');
+  };
+
+  const handleSearch = (params: { location: string; checkIn: string; checkOut: string; guests: number }) => {
+    const query = new URLSearchParams();
+    if (params.location.trim()) query.set('q', params.location.trim());
+    if (params.checkIn) query.set('checkIn', params.checkIn);
+    if (params.checkOut) query.set('checkOut', params.checkOut);
+    query.set('guests', String(params.guests || 1));
+    navigate(`/stays?${query.toString()}`);
+  };
+
+  const handleSubscribe = () => {
+    if (!newsletterEmail.trim() || !newsletterEmail.includes('@')) {
+      setNewsletterMessage('请输入有效的邮箱地址');
+      return;
+    }
+    setNewsletterMessage('订阅成功，我们会把最新旅行资讯发送到你的邮箱');
+    setNewsletterEmail('');
+  };
+
   return (
     <div className="min-h-screen bg-neutral-8">
       <Navbar />
@@ -67,13 +93,13 @@ function Home() {
           <p className="text-lg md:text-xl text-white/80 mb-8 max-w-xl">
             {homeData?.hero.subtitle || '发现独特的住宿体验，开启难忘的旅程。超过 100,000+ 个精选房源等你探索。'}
           </p>
-          <SearchBar className="max-w-4xl" />
+          <SearchBar className="max-w-4xl" onSearch={handleSearch} />
         </div>
       </section>
 
       {/* Category Tabs */}
       <section className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8">
-        <CategoryTabs />
+        <CategoryTabs onChange={handleCategoryChange} />
       </section>
 
       {/* Popular Destinations */}
@@ -138,9 +164,11 @@ function Home() {
             <p className="text-white/80 mb-6 max-w-lg">
               春季特惠来袭！精选目的地低至5折，更有免费取消保障。立即预订，开启你的完美假期。
             </p>
-            <Button variant="neutral" size="lg" className="bg-white text-primary-1 hover:bg-white/90">
-              立即查看优惠
-            </Button>
+            <Link to="/stays">
+              <Button variant="neutral" size="lg" className="bg-white text-primary-1 hover:bg-white/90">
+                立即查看优惠
+              </Button>
+            </Link>
           </div>
           <div className="w-full md:w-80 aspect-square rounded-2xl overflow-hidden">
             <img
@@ -217,12 +245,17 @@ function Home() {
             <input
               type="email"
               placeholder="输入你的邮箱地址"
+              value={newsletterEmail}
+              onChange={(e) => setNewsletterEmail(e.target.value)}
               className="w-full px-5 py-3 rounded-full bg-neutral-3 text-white placeholder:text-neutral-5 outline-none focus:ring-2 focus:ring-primary-1"
             />
-            <Button size="lg" leftIcon={<Send size={16} />} className="shrink-0 w-full sm:w-auto">
+            <Button size="lg" leftIcon={<Send size={16} />} className="shrink-0 w-full sm:w-auto" onClick={handleSubscribe}>
               订阅
             </Button>
           </div>
+          {newsletterMessage && (
+            <p className="mt-4 text-xs text-white/90">{newsletterMessage}</p>
+          )}
         </div>
       </section>
 

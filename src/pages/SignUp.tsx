@@ -1,10 +1,25 @@
-import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { useState, type FormEvent } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import { Eye, EyeOff } from 'lucide-react';
 import Button from '@/components/Button';
 
 function SignUp() {
+  const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
+
+  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    if (!name.trim() || !email.trim() || !password.trim()) {
+      setError('请完整填写姓名、邮箱和密码');
+      return;
+    }
+    setError('');
+    navigate('/signin');
+  };
 
   return (
     <div className="min-h-screen bg-neutral-7 flex items-center justify-center p-4">
@@ -15,12 +30,14 @@ function SignUp() {
             <p className="text-neutral-4 mt-2">创建你的账户，开启旅程</p>
           </div>
 
-          <form className="space-y-4" onSubmit={(e) => e.preventDefault()}>
+          <form className="space-y-4" onSubmit={handleSubmit}>
             <div>
               <label className="block text-sm font-medium text-neutral-3 mb-1.5">姓名</label>
               <input
                 type="text"
                 placeholder="请输入你的姓名"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
                 className="w-full px-4 py-3 rounded-xl border border-neutral-6 text-sm outline-none focus:border-primary-1 transition-colors"
               />
             </div>
@@ -29,6 +46,8 @@ function SignUp() {
               <input
                 type="email"
                 placeholder="example@email.com"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
                 className="w-full px-4 py-3 rounded-xl border border-neutral-6 text-sm outline-none focus:border-primary-1 transition-colors"
               />
             </div>
@@ -38,6 +57,8 @@ function SignUp() {
                 <input
                   type={showPassword ? 'text' : 'password'}
                   placeholder="至少8位字符"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
                   className="w-full px-4 py-3 rounded-xl border border-neutral-6 text-sm outline-none focus:border-primary-1 transition-colors pr-12"
                 />
                 <button
@@ -51,6 +72,7 @@ function SignUp() {
             </div>
 
             <Button className="w-full" size="lg" type="submit">注册</Button>
+            {error && <p className="text-xs text-red-500">{error}</p>}
           </form>
 
           <div className="flex items-center gap-4 my-6">

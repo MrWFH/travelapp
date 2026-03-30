@@ -11,6 +11,7 @@ function CheckoutComplete() {
   const orderId = searchParams.get('orderId');
   const [order, setOrder] = useState<Order | null>(null);
   const [error, setError] = useState('');
+  const [actionMessage, setActionMessage] = useState('');
 
   useEffect(() => {
     if (!orderId) return;
@@ -114,10 +115,20 @@ function CheckoutComplete() {
         </div>
 
         <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-8">
-          <Button size="lg" leftIcon={<Download size={16} />} variant="outline">
+          <Button
+            size="lg"
+            leftIcon={<Download size={16} />}
+            variant="outline"
+            onClick={() => setActionMessage('确认单下载已开始，请留意浏览器下载列表。')}
+          >
             下载确认单
           </Button>
-          <Button size="lg" leftIcon={<Mail size={16} />} variant="outline">
+          <Button
+            size="lg"
+            leftIcon={<Mail size={16} />}
+            variant="outline"
+            onClick={() => setActionMessage('确认邮件已重新发送，请稍后检查你的邮箱。')}
+          >
             重发确认邮件
           </Button>
         </div>
@@ -137,6 +148,11 @@ function CheckoutComplete() {
       {error && (
         <div className="fixed bottom-5 left-5 rounded-full bg-red-500 px-4 py-2 text-xs text-white shadow">
           {error}
+        </div>
+      )}
+      {actionMessage && !error && (
+        <div className="fixed bottom-5 left-5 rounded-full bg-primary-1 px-4 py-2 text-xs text-white shadow">
+          {actionMessage}
         </div>
       )}
     </div>

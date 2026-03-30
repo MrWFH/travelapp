@@ -33,7 +33,7 @@ function UserProfile() {
                 alt="avatar"
                 className="w-28 h-28 rounded-full mx-auto object-cover border-4 border-neutral-7 mb-4"
               />
-              <h1 className="text-xl font-bold text-neutral-1 mb-1">李明</h1>
+              <h1 className="text-xl font-bold text-neutral-1 mb-1">王小明</h1>
               <p className="text-sm text-neutral-4 mb-4">旅行爱好者 · 摄影达人</p>
 
               <div className="flex items-center justify-center gap-2 text-sm text-neutral-4 mb-6">

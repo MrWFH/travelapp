@@ -1,10 +1,24 @@
-import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { useState, type FormEvent } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import { Eye, EyeOff } from 'lucide-react';
 import Button from '@/components/Button';
 
 function SignIn() {
+  const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
+
+  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    if (!email.trim() || !password.trim()) {
+      setError('请输入邮箱和密码');
+      return;
+    }
+    setError('');
+    navigate('/profile');
+  };
 
   return (
     <div className="min-h-screen bg-neutral-7 flex items-center justify-center p-4">
@@ -15,12 +29,14 @@ function SignIn() {
             <p className="text-neutral-4 mt-2">欢迎回来，登录你的账户</p>
           </div>
 
-          <form className="space-y-4" onSubmit={(e) => e.preventDefault()}>
+          <form className="space-y-4" onSubmit={handleSubmit}>
             <div>
               <label className="block text-sm font-medium text-neutral-3 mb-1.5">邮箱</label>
               <input
                 type="email"
                 placeholder="example@email.com"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
                 className="w-full px-4 py-3 rounded-xl border border-neutral-6 text-sm outline-none focus:border-primary-1 transition-colors"
               />
             </div>
@@ -35,6 +51,8 @@ function SignIn() {
                 <input
                   type={showPassword ? 'text' : 'password'}
                   placeholder="请输入密码"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
                   className="w-full px-4 py-3 rounded-xl border border-neutral-6 text-sm outline-none focus:border-primary-1 transition-colors pr-12"
                 />
                 <button
@@ -53,6 +71,7 @@ function SignIn() {
             </label>
 
             <Button className="w-full" size="lg" type="submit">登录</Button>
+            {error && <p className="text-xs text-red-500">{error}</p>}
           </form>
 
           <div className="flex items-center gap-4 my-6">

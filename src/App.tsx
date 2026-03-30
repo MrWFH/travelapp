@@ -18,6 +18,7 @@ import HelpCenter from '@/pages/HelpCenter';
 import HostProfile from '@/pages/HostProfile';
 import ListProperty from '@/pages/ListProperty';
 import ShowMap from '@/pages/ShowMap';
+import ContentPage from '@/pages/ContentPage';
 
 function App() {
   return (
@@ -41,6 +42,7 @@ function App() {
       <Route path="/host/:id" element={<HostProfile />} />
       <Route path="/list-property" element={<ListProperty />} />
       <Route path="/map" element={<ShowMap />} />
+      <Route path="*" element={<ContentPage />} />
     </Routes>
   );
 }

@@ -142,7 +142,7 @@ export interface Order {
   createdAt: string;
 }
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:4000';
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8001';
 
 async function request<T>(path: string, init?: RequestInit): Promise<T> {
   const response = await fetch(`${API_BASE_URL}${path}`, {
@@ -168,6 +168,7 @@ export function getHomeData() {
 }
 
 export function getProperties(params: {
+  q?: string;
   minPrice?: number;
   maxPrice?: number;
   minRating?: number;
@@ -178,6 +179,7 @@ export function getProperties(params: {
   amenities?: string[];
 }) {
   const query = new URLSearchParams();
+  if (params.q?.trim()) query.set('q', params.q.trim());
   if (typeof params.minPrice === 'number') query.set('minPrice', String(params.minPrice));
   if (typeof params.maxPrice === 'number') query.set('maxPrice', String(params.maxPrice));
   if (typeof params.minRating === 'number') query.set('minRating', String(params.minRating));

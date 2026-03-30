@@ -34,6 +34,8 @@ function ProductDetail() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [detail, setDetail] = useState<PropertyDetailResponse | null>(null);
+  const [isFavorite, setIsFavorite] = useState(false);
+  const [actionMessage, setActionMessage] = useState('');
 
   useEffect(() => {
     let mounted = true;
@@ -96,11 +98,15 @@ function ProductDetail() {
             </div>
           ))}
           <button
-            onClick={() => setShowAllPhotos(!showAllPhotos)}
+            onClick={() => {
+              const next = !showAllPhotos;
+              setShowAllPhotos(next);
+              setActionMessage(next ? '已切换为查看全部照片模式。' : '已返回精选照片视图。');
+            }}
             className="absolute bottom-4 right-4 flex items-center gap-2 px-4 py-2 rounded-full bg-white/90 backdrop-blur text-sm font-medium text-neutral-2 hover:bg-white transition-colors cursor-pointer"
           >
             <Images size={16} />
-            显示所有照片
+            {showAllPhotos ? '收起照片' : '显示所有照片'}
           </button>
         </div>
 
@@ -122,11 +128,32 @@ function ProductDetail() {
             </div>
           </div>
           <div className="flex items-center gap-3">
-            <button className="flex items-center gap-2 px-4 py-2 rounded-full border border-neutral-6 text-sm font-medium text-neutral-2 hover:bg-neutral-7 cursor-pointer">
+            <button
+              onClick={() => {
+                const pageUrl = window.location.href;
+                if (navigator.clipboard?.writeText) {
+                  void navigator.clipboard.writeText(pageUrl);
+                  setActionMessage('链接已复制，可分享给朋友。');
+                  return;
+                }
+                setActionMessage('当前浏览器不支持自动复制，请手动复制地址栏链接。');
+              }}
+              className="flex items-center gap-2 px-4 py-2 rounded-full border border-neutral-6 text-sm font-medium text-neutral-2 hover:bg-neutral-7 cursor-pointer"
+            >
               <Share2 size={16} /> 分享
             </button>
-            <button className="flex items-center gap-2 px-4 py-2 rounded-full border border-neutral-6 text-sm font-medium text-neutral-2 hover:bg-neutral-7 cursor-pointer">
-              <Heart size={16} /> 收藏
+            <button
+              onClick={() => {
+                setIsFavorite((prev) => !prev);
+                setActionMessage(isFavorite ? '已取消收藏该房源。' : '已收藏该房源。');
+              }}
+              className={`flex items-center gap-2 px-4 py-2 rounded-full border text-sm font-medium cursor-pointer ${
+                isFavorite
+                  ? 'border-red-200 bg-red-50 text-red-500'
+                  : 'border-neutral-6 text-neutral-2 hover:bg-neutral-7'
+              }`}
+            >
+              <Heart size={16} className={isFavorite ? 'fill-red-500 text-red-500' : ''} /> 收藏
             </button>
           </div>
         </div>
@@ -320,6 +347,11 @@ function ProductDetail() {
       {error && (
         <div className="fixed bottom-5 left-5 rounded-full bg-red-500 px-4 py-2 text-xs text-white shadow">
           {error}
+        </div>
+      )}
+      {actionMessage && !error && (
+        <div className="fixed bottom-5 left-5 rounded-full bg-primary-1 px-4 py-2 text-xs text-white shadow">
+          {actionMessage}
         </div>
       )}
     </div>

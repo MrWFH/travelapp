@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { Search, MapPin, Calendar, Users } from 'lucide-react';
 import Button from '@/components/Button';
 
@@ -15,12 +16,17 @@ interface SearchBarProps {
 }
 
 function SearchBar({ variant = 'hero', onSearch, className = '' }: SearchBarProps) {
+  const [location, setLocation] = useState('');
+  const [checkIn, setCheckIn] = useState('');
+  const [checkOut, setCheckOut] = useState('');
+  const [guests, setGuests] = useState(1);
+
   const handleSearch = () => {
     onSearch?.({
-      location: '',
-      checkIn: '',
-      checkOut: '',
-      guests: 1,
+      location,
+      checkIn,
+      checkOut,
+      guests,
     });
   };
 
@@ -31,6 +37,8 @@ function SearchBar({ variant = 'hero', onSearch, className = '' }: SearchBarProp
         <input
           type="text"
           placeholder="搜索目的地、住宿..."
+          value={location}
+          onChange={(e) => setLocation(e.target.value)}
           className="flex-1 bg-transparent text-sm outline-none placeholder:text-neutral-5"
         />
         <Button size="sm" onClick={handleSearch}>搜索</Button>
@@ -49,6 +57,8 @@ function SearchBar({ variant = 'hero', onSearch, className = '' }: SearchBarProp
             <input
               type="text"
               placeholder="你想去哪里？"
+              value={location}
+              onChange={(e) => setLocation(e.target.value)}
               className="w-full bg-transparent text-sm font-medium outline-none placeholder:text-neutral-5"
             />
           </div>
@@ -59,9 +69,14 @@ function SearchBar({ variant = 'hero', onSearch, className = '' }: SearchBarProp
         {/* Check-in */}
         <div className="flex-1 flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-neutral-7 transition-colors cursor-pointer">
           <Calendar size={20} className="text-primary-1 shrink-0" />
-          <div>
+            <div className="min-w-0 flex-1">
             <div className="text-xs text-neutral-4 font-medium">入住</div>
-            <div className="text-sm font-medium text-neutral-5">选择日期</div>
+              <input
+                type="date"
+                value={checkIn}
+                onChange={(e) => setCheckIn(e.target.value)}
+                className="w-full bg-transparent text-sm font-medium text-neutral-5 outline-none"
+              />
           </div>
         </div>
 
@@ -70,9 +85,14 @@ function SearchBar({ variant = 'hero', onSearch, className = '' }: SearchBarProp
         {/* Check-out */}
         <div className="flex-1 flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-neutral-7 transition-colors cursor-pointer">
           <Calendar size={20} className="text-primary-1 shrink-0" />
-          <div>
+            <div className="min-w-0 flex-1">
             <div className="text-xs text-neutral-4 font-medium">退房</div>
-            <div className="text-sm font-medium text-neutral-5">选择日期</div>
+              <input
+                type="date"
+                value={checkOut}
+                onChange={(e) => setCheckOut(e.target.value)}
+                className="w-full bg-transparent text-sm font-medium text-neutral-5 outline-none"
+              />
           </div>
         </div>
 
@@ -81,9 +101,16 @@ function SearchBar({ variant = 'hero', onSearch, className = '' }: SearchBarProp
         {/* Guests */}
         <div className="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-neutral-7 transition-colors cursor-pointer">
           <Users size={20} className="text-primary-1 shrink-0" />
-          <div>
+          <div className="min-w-0 flex-1">
             <div className="text-xs text-neutral-4 font-medium">旅客</div>
-            <div className="text-sm font-medium text-neutral-5">添加旅客</div>
+            <input
+              type="number"
+              min={1}
+              max={10}
+              value={guests}
+              onChange={(e) => setGuests(Math.min(10, Math.max(1, Number(e.target.value || 1))))}
+              className="w-full bg-transparent text-sm font-medium text-neutral-5 outline-none"
+            />
           </div>
         </div>
 

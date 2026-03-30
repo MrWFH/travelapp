@@ -1,4 +1,5 @@
 import { Star, Shield, Award, MapPin, Calendar, MessageSquare, Flag } from 'lucide-react';
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
@@ -14,10 +15,10 @@ const HOST_PROPERTIES = [
 ];
 
 const GUEST_REVIEWS = [
-  { id: 1, name: '李明', avatar: 'https://picsum.photos/seed/gr1/100/100', date: '2026年2月', rating: 5, text: '非常棒的住宿体验！Sarah 非常热心，提前发了详细的入住指南，还推荐了很多当地好去处。房间比照片上还美！' },
-  { id: 2, name: '王芳', avatar: 'https://picsum.photos/seed/gr2/100/100', date: '2026年1月', rating: 5, text: '完美的假期！Sarah 帮我们安排了接机和一日游，省去了很多麻烦。房源设施一流，泳池太棒了。' },
-  { id: 3, name: '张伟', avatar: 'https://picsum.photos/seed/gr3/100/100', date: '2025年12月', rating: 4, text: '房间干净整洁，位置优越。Sarah 回复消息很及时，是非常负责的房东。唯一建议是增加一些中文指引。' },
-  { id: 4, name: '陈静', avatar: 'https://picsum.photos/seed/gr4/100/100', date: '2025年11月', rating: 5, text: '连续第三年入住 Sarah 的房源了！每次都有惊喜。强烈推荐给所有来巴厘岛的朋友。' },
+  { id: 1, name: '王小明', avatar: 'https://picsum.photos/seed/gr1/100/100', date: '2026年2月', rating: 5, text: '非常棒的住宿体验！Sarah 非常热心，提前发了详细的入住指南，还推荐了很多当地好去处。房间比照片上还美！' },
+  { id: 2, name: '王小芳', avatar: 'https://picsum.photos/seed/gr2/100/100', date: '2026年1月', rating: 5, text: '完美的假期！Sarah 帮我们安排了接机和一日游，省去了很多麻烦。房源设施一流，泳池太棒了。' },
+  { id: 3, name: '张小伟', avatar: 'https://picsum.photos/seed/gr3/100/100', date: '2025年12月', rating: 4, text: '房间干净整洁，位置优越。Sarah 回复消息很及时，是非常负责的房东。唯一建议是增加一些中文指引。' },
+  { id: 4, name: '陈小静', avatar: 'https://picsum.photos/seed/gr4/100/100', date: '2025年11月', rating: 5, text: '连续第三年入住 Sarah 的房源了！每次都有惊喜。强烈推荐给所有来巴厘岛的朋友。' },
   { id: 5, name: 'David Kim', avatar: 'https://picsum.photos/seed/gr5/100/100', date: '2025年10月', rating: 5, text: 'Amazing host! Very responsive and helpful. The property exceeded our expectations.' },
 ];
 
@@ -28,6 +29,8 @@ const BADGES = [
 ];
 
 function HostProfile() {
+  const [actionMessage, setActionMessage] = useState('');
+
   return (
     <div className="min-h-screen bg-neutral-8">
       <Navbar />
@@ -80,7 +83,10 @@ function HostProfile() {
                 <Link to="/messages">
                   <Button className="w-full" leftIcon={<MessageSquare size={16} />}>联系房东</Button>
                 </Link>
-                <button className="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-full text-sm font-medium text-neutral-4 hover:text-red-500 hover:bg-red-50 transition-colors cursor-pointer">
+                <button
+                  onClick={() => setActionMessage('举报已提交，客服团队将尽快核查该房东信息。')}
+                  className="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-full text-sm font-medium text-neutral-4 hover:text-red-500 hover:bg-red-50 transition-colors cursor-pointer"
+                >
                   <Flag size={14} /> 举报此房东
                 </button>
               </div>
@@ -146,6 +152,12 @@ function HostProfile() {
       </div>
 
       <Footer />
+
+      {actionMessage && (
+        <div className="fixed bottom-5 left-5 rounded-full bg-primary-1 px-4 py-2 text-xs text-white shadow">
+          {actionMessage}
+        </div>
+      )}
     </div>
   );
 }
